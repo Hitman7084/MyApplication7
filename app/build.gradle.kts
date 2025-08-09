@@ -7,6 +7,12 @@ plugins {
     id("kotlin-kapt")
 }
 
+repositories {
+    google()
+    mavenCentral() // official Supabase libraries
+    maven("https://jitpack.io")
+}
+
 android {
     namespace = "com.example.myapplication7"
     compileSdk = 34
