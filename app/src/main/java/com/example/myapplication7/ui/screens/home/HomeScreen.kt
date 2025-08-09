@@ -4,9 +4,17 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Button
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.NavigationDrawerItem
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SmallTopAppBar
 import androidx.compose.material3.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -14,11 +22,16 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScreen(
-    onLogout: () -> Unit
+    onLogout: () -> Unit,
+    onProfileClick: () -> Unit
 ) {
+    val drawerState = androidx.compose.material3.rememberDrawerState(initialValue = androidx.compose.material3.DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
+
     var startAnimation by remember { mutableStateOf(false) }
     val scale by animateFloatAsState(
         targetValue = if (startAnimation) 1f else 0f,
@@ -29,43 +42,75 @@ fun HomeScreen(
         startAnimation = true
     }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
-                        MaterialTheme.colorScheme.secondary.copy(alpha = 0.3f)
-                    )
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = {
+            ModalDrawerSheet {
+                NavigationDrawerItem(
+                    label = { Text("Profile") },
+                    selected = false,
+                    onClick = {
+                        scope.launch { drawerState.close() }
+                        onProfileClick()
+                    }
                 )
-            ),
-        contentAlignment = Alignment.Center
+                NavigationDrawerItem(
+                    label = { Text("Logout") },
+                    selected = false,
+                    onClick = {
+                        scope.launch { drawerState.close() }
+                        onLogout()
+                    }
+                )
+            }
+        }
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = "🫡",
-                fontSize = 16.sp,
-                modifier = Modifier.scale(scale)
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = "Login Successful!",
-                style = MaterialTheme.typography.headlineLarge,
-                color = MaterialTheme.colorScheme.primary
-            )
-            Spacer(modifier = Modifier.height(32.dp))
-            Button(
-                onClick = onLogout,
-                modifier = Modifier.fillMaxWidth(0.8f)
+        Scaffold(
+            topBar = {
+                SmallTopAppBar(
+                    title = { Text("Home") },
+                    navigationIcon = {
+                        IconButton(onClick = { scope.launch { drawerState.open() } }) {
+                            Icon(Icons.Default.Menu, contentDescription = null)
+                        }
+                    }
+                )
+            }
+        ) { padding ->
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding)
+                    .background(
+                        brush = Brush.verticalGradient(
+                            colors = listOf(
+                                MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
+                                MaterialTheme.colorScheme.secondary.copy(alpha = 0.3f)
+                            )
+                        )
+                    ),
+                contentAlignment = Alignment.Center
             ) {
-                Text("Logout")
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "🫡",
+                        fontSize = 16.sp,
+                        modifier = Modifier.scale(scale)
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = "Login Successful!",
+                        style = MaterialTheme.typography.headlineLarge,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                    Spacer(modifier = Modifier.height(32.dp))
+                }
             }
         }
     }

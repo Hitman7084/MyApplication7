@@ -10,7 +10,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.myapplication7.navigation.AuthNavHost
+import com.example.myapplication7.navigation.Screen
 import com.example.myapplication7.ui.screens.home.HomeScreen // Corrected import path
+import com.example.myapplication7.ui.screens.profile.ProfileScreen
 import com.example.myapplication7.ui.theme.StudyFocusTheme
 import com.example.myapplication7.ui.viewmodel.AuthViewModel // Import the ViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,32 +34,29 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun AppNav() {
     val navController = rememberNavController()
-    // Get an instance of the ViewModel, scoped to this NavHost
     val authViewModel: AuthViewModel = hiltViewModel()
 
-    NavHost(navController = navController, startDestination = "auth_flow") {
-        // Authentication Flow Route
-        composable("auth_flow") {
-            // A separate NavHost for auth screens
+    NavHost(navController = navController, startDestination = Screen.Auth.route) {
+        composable(Screen.Auth.route) {
             AuthNavHost(navController = rememberNavController(), onLoginSuccess = {
-                // On success, navigate to home and clear the auth back stack
-                navController.navigate("home") {
-                    popUpTo("auth_flow") { inclusive = true }
+                navController.navigate(Screen.Home.route) {
+                    popUpTo(Screen.Auth.route) { inclusive = true }
                 }
             })
         }
-        // Home Screen Route
-        composable("home") {
-            // Pass the logout logic to the HomeScreen
-            HomeScreen(onLogout = {
-                // 1. Call the logout function on the ViewModel to reset state
-                authViewModel.logout()
-                // 2. Navigate back to the login screen
-                navController.navigate("auth_flow") {
-                    // Clear the back stack so the user can't press "back" to get into the app
-                    popUpTo("home") { inclusive = true }
-                }
-            })
+        composable(Screen.Home.route) {
+            HomeScreen(
+                onLogout = {
+                    authViewModel.logout()
+                    navController.navigate(Screen.Auth.route) {
+                        popUpTo(Screen.Home.route) { inclusive = true }
+                    }
+                },
+                onProfileClick = { navController.navigate(Screen.Profile.route) }
+            )
+        }
+        composable(Screen.Profile.route) {
+            ProfileScreen()
         }
     }
 }
