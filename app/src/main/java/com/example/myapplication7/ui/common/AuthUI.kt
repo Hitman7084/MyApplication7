@@ -4,10 +4,13 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -71,29 +74,50 @@ fun ProfilePictureSelector(
     selectedOption: ImageVector,
     onOptionSelected: (ImageVector) -> Unit
 ) {
+    val currentIndex = options.indexOf(selectedOption).takeIf { it >= 0 } ?: 0
+
     Row(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceEvenly
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        options.forEach { option ->
-            val isSelected = option == selectedOption
-            val borderModifier = if (isSelected) {
-                Modifier.border(2.dp, MaterialTheme.colorScheme.secondary, CircleShape)
-            } else {
-                Modifier
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Button(onClick = {
+                val nextIndex = (currentIndex + 1) % options.size
+                onOptionSelected(options[nextIndex])
+            }) {
+                Text("Change")
             }
 
-            IconButton(
-                onClick = { onOptionSelected(option) },
-                modifier = Modifier.size(64.dp).clip(CircleShape).then(borderModifier)
-            ) {
+            IconButton(onClick = {
+                val nextIndex = (currentIndex + 1) % options.size
+                onOptionSelected(options[nextIndex])
+            }) {
                 Icon(
-                    imageVector = option,
-                    contentDescription = null,
-                    modifier = Modifier.size(48.dp),
-                    tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                    imageVector = Icons.Default.Refresh,
+                    contentDescription = "Switch profile picture"
                 )
             }
+        }
+
+        Spacer(modifier = Modifier.width(24.dp))
+
+        Box(
+            modifier = Modifier
+                .size(128.dp)
+                .clip(CircleShape)
+                .border(2.dp, MaterialTheme.colorScheme.secondary, CircleShape),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = selectedOption,
+                contentDescription = null,
+                modifier = Modifier.size(96.dp),
+                tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+            )
         }
     }
 }
