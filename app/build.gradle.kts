@@ -21,6 +21,8 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        buildConfigField("String", "SUPABASE_URL", '"https://example.supabase.co"')
+        buildConfigField("String", "SUPABASE_ANON_KEY", '"public-anon-key"')
     }
 
     buildTypes {
@@ -70,4 +72,8 @@ dependencies {
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
+
+    // Supabase authentication
+    implementation(libs.supabase.gotrue)
+    implementation(libs.ktor.client.android)
 }
