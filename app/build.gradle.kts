@@ -76,6 +76,6 @@ dependencies {
 
     // Supabase authentication
     implementation(libs.supabase.kt)
-    implementation(libs.supabase.auth)
+    implementation(libs.supabase.gotrue)
     implementation(libs.ktor.client.android)
 }
