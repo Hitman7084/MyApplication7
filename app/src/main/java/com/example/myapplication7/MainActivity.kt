@@ -38,11 +38,15 @@ fun AppNav() {
 
     NavHost(navController = navController, startDestination = Screen.Auth.route) {
         composable(Screen.Auth.route) {
-            AuthNavHost(navController = rememberNavController(), onLoginSuccess = {
-                navController.navigate(Screen.Home.route) {
-                    popUpTo(Screen.Auth.route) { inclusive = true }
+            val authNavController = rememberNavController()
+            AuthNavHost(
+                navController = authNavController,
+                onLoginSuccess = {
+                    navController.navigate(Screen.Home.route) {
+                        popUpTo(Screen.Auth.route) { inclusive = true }
+                    }
                 }
-            })
+            )
         }
         composable(Screen.Home.route) {
             HomeScreen(
