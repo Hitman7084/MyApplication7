@@ -1,3 +1,7 @@
 <resources>
-    <style name="Theme.MyApplication7" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.MyApplication7" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:colorPrimary">@color/purple</item>
+        <item name="android:colorAccent">@color/yellow</item>
+        <item name="android:colorBackground">@color/dark_gray</item>
+    </style>
 </resources>
