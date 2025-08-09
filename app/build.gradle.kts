@@ -78,6 +78,7 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
 
     // Supabase authentication
+    implementation(platform(libs.supabase.bom))
     implementation(libs.supabase.kt)
     implementation(libs.supabase.gotrue)
     implementation(libs.ktor.client.android)
