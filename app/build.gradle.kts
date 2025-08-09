@@ -21,8 +21,8 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-        buildConfigField("String", "SUPABASE_URL", '"https://clhvkqbcukiibngysuuz.supabase.co"')
-        buildConfigField("String", "SUPABASE_ANON_KEY", '"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNsaHZrcWJjdWtpaWJuZ3lzdXV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ3NDE1NjcsImV4cCI6MjA3MDMxNzU2N30.EBnAINQWpM3EslUy2FjcdQa1SwdiWQz2Vj-G4TKuLFw"')
+        buildConfigField("String", "SUPABASE_URL", "https://clhvkqbcukiibngysuuz.supabase.co")
+        buildConfigField("String", "SUPABASE_ANON_KEY", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNsaHZrcWJjdWtpaWJuZ3lzdXV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ3NDE1NjcsImV4cCI6MjA3MDMxNzU2N30.EBnAINQWpM3EslUy2FjcdQa1SwdiWQz2Vj-G4TKuLFw")
     }
 
     buildTypes {
