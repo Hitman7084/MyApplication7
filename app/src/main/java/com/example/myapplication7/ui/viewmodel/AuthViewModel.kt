@@ -5,8 +5,8 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.myapplication7.data.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -27,7 +27,9 @@ data class AuthUiState(
 )
 
 @HiltViewModel
-class AuthViewModel @Inject constructor() : ViewModel() {
+class AuthViewModel @Inject constructor(
+    private val authRepository: AuthRepository
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(AuthUiState())
     val uiState = _uiState.asStateFlow()
@@ -49,27 +51,50 @@ class AuthViewModel @Inject constructor() : ViewModel() {
     }
 
     fun onLoginClicked() {
+        val email = uiState.value.email
+        val password = uiState.value.password
         viewModelScope.launch {
-            // ... (login logic)
-            _uiState.update { it.copy(isLoading = false, loginSuccess = true) }
+            _uiState.update { it.copy(isLoading = true) }
+            try {
+                authRepository.login(email, password)
+                _uiState.update { it.copy(isLoading = false, loginSuccess = true) }
+            } catch (e: Exception) {
+                _uiState.update { it.copy(isLoading = false, emailError = e.message) }
+            }
         }
     }
 
     fun onSignupClicked() {
+        val email = uiState.value.email
+        val password = uiState.value.password
         viewModelScope.launch {
-            // ... (signup logic)
-            _uiState.update { it.copy(isLoading = false, loginSuccess = true) }
+            _uiState.update { it.copy(isLoading = true) }
+            try {
+                authRepository.signup(email, password)
+                _uiState.update { it.copy(isLoading = false, loginSuccess = true) }
+            } catch (e: Exception) {
+                _uiState.update { it.copy(isLoading = false, emailError = e.message) }
+            }
         }
     }
 
     fun onSendResetLink() {
+        val email = uiState.value.email
         viewModelScope.launch {
-            // ... (reset link logic)
-            _uiState.update { it.copy(isLoading = false, passwordResetLinkSent = true) }
+            _uiState.update { it.copy(isLoading = true) }
+            try {
+                authRepository.sendPasswordReset(email)
+                _uiState.update { it.copy(isLoading = false, passwordResetLinkSent = true) }
+            } catch (e: Exception) {
+                _uiState.update { it.copy(isLoading = false, emailError = e.message) }
+            }
         }
     }
+
     fun logout() {
-        // Reset the entire state to its initial default values
-        _uiState.value = AuthUiState()
+        viewModelScope.launch {
+            authRepository.logout()
+            _uiState.value = AuthUiState()
+        }
     }
 }
