@@ -1,8 +1,8 @@
 package com.example.myapplication7.data.repository
 
 import io.github.jan.supabase.SupabaseClient
-import io.github.jan.supabase.auth.auth
-import io.github.jan.supabase.auth.providers.builtin.Email
+import io.github.jan.supabase.gotrue.gotrue
+import io.github.jan.supabase.gotrue.providers.builtin.Email
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -18,7 +18,7 @@ class AuthRepository @Inject constructor(
      * Log in an existing user using email and password.
      */
     suspend fun login(email: String, password: String) {
-        client.auth.signInWith(Email) {
+        client.gotrue.signInWith(Email) {
             this.email = email
             this.password = password
         }
@@ -28,7 +28,7 @@ class AuthRepository @Inject constructor(
      * Create a new user account using email and password.
      */
     suspend fun signup(email: String, password: String) {
-        client.auth.signUpWith(Email) {
+        client.gotrue.signUpWith(Email) {
             this.email = email
             this.password = password
         }
@@ -38,14 +38,14 @@ class AuthRepository @Inject constructor(
      * Send a password reset link to the provided email address.
      */
     suspend fun sendPasswordReset(email: String) {
-        client.auth.resetPasswordForEmail(email)
+        client.gotrue.resetPasswordForEmail(email)
     }
 
     /**
      * Sign out the currently logged in user.
      */
     suspend fun logout() {
-        client.auth.signOut()
+        client.gotrue.signOut()
     }
 }
 
