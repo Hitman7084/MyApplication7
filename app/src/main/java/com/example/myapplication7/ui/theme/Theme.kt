@@ -6,21 +6,20 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 private val LightColorScheme = lightColorScheme(
-    primary = PrimaryBlue,
-    secondary = AccentTeal,
-    background = LightGray,
-    surface = Color.White,
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onBackground = CharcoalGray,
-    onSurface = CharcoalGray,
-    error = ErrorRed
+    primary = Purple,
+    secondary = Yellow,
+    background = DarkGray,
+    surface = DarkGray,
+    onPrimary = Yellow,
+    onSecondary = DarkGray,
+    onBackground = Yellow,
+    onSurface = Yellow,
+    error = Purple
 )
 
 @Composable
