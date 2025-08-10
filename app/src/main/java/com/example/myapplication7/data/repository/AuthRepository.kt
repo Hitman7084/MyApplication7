@@ -31,6 +31,7 @@ class AuthRepository @Inject constructor(
         client.auth.signUpWith(Email) {
             this.email = email
             this.password = password
+            this.redirectTo = "myapplication7://login"
         }
     }
 
@@ -38,7 +39,7 @@ class AuthRepository @Inject constructor(
      * Send a password reset link to the provided email address.
      */
     suspend fun sendPasswordReset(email: String) {
-        client.auth.resetPasswordForEmail(email)
+        client.auth.resetPasswordForEmail(email, redirectTo = "myapplication7://login")
     }
 
     /**
