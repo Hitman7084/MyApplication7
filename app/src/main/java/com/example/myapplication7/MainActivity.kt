@@ -37,6 +37,12 @@ fun AppNav() {
     val navController = rememberNavController()
     // Get an instance of the ViewModel, scoped to this NavHost
     val authViewModel: AuthViewModel = hiltViewModel()
+    val logout: () -> Unit = {
+        authViewModel.logout()
+        navController.navigate(Screen.Auth.route) {
+            popUpTo(Screen.Profile.route) { inclusive = true }
+        }
+    }
 
     NavHost(navController = navController, startDestination = Screen.Auth.route) {
         // Authentication Flow Route
@@ -51,24 +57,13 @@ fun AppNav() {
         }
         // Profile Screen Route
         composable(Screen.Profile.route) {
-            // Pass the logout logic to the HomeScreen
-            HomeScreen(navController = navController, onLogout = {
-                // 1. Call the logout function on the ViewModel to reset state
-                authViewModel.logout()
-                // 2. Navigate back to the login screen
-                navController.navigate(Screen.Auth.route) {
-                    // Clear the back stack so the user can't press "back" to get into the app
-                    popUpTo(Screen.Profile.route) { inclusive = true }
-                }
-            })
+            HomeScreen(navController = navController, onLogout = logout)
         }
-        // Calendar Screen Route
         composable(Screen.Calendar.route) {
-            CalendarScreen()
+            CalendarScreen(navController = navController, onLogout = logout)
         }
-        // Bot Screen Route
         composable(Screen.Bot.route) {
-            BotScreen()
+            BotScreen(navController = navController, onLogout = logout)
         }
     }
 }

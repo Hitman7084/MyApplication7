@@ -24,7 +24,9 @@ object AppModule {
             supabaseUrl = BuildConfig.SUPABASE_URL,
             supabaseKey = BuildConfig.SUPABASE_ANON_KEY
         ) {
-            install(Auth)
+            install(Auth) {
+                scheme = "myapplication7"
+            }
         }
 }
 

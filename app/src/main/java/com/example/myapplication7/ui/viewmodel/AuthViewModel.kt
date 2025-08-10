@@ -51,22 +51,46 @@ class AuthViewModel @Inject constructor(
     }
 
     fun onLoginClicked() {
-        val email = uiState.value.email
-        val password = uiState.value.password
+        val email = uiState.value.email.trim()
+        val password = uiState.value.password.trim()
+        if (email.isBlank()) {
+            _uiState.update { it.copy(emailError = "Email cannot be blank") }
+            return
+        }
+        if (password.isBlank()) {
+            _uiState.update { it.copy(passwordError = "Password cannot be blank") }
+            return
+        }
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
             try {
                 authRepository.login(email, password)
                 _uiState.update { it.copy(isLoading = false, loginSuccess = true) }
             } catch (e: Exception) {
-                _uiState.update { it.copy(isLoading = false, emailError = e.message) }
+                _uiState.update { it.copy(isLoading = false, passwordError = "Incorrect email or password") }
             }
         }
     }
 
     fun onSignupClicked() {
-        val email = uiState.value.email
-        val password = uiState.value.password
+        val name = uiState.value.name.trim()
+        val email = uiState.value.email.trim()
+        val password = uiState.value.password.trim()
+        var hasError = false
+        if (name.isBlank()) {
+            _uiState.update { it.copy(nameError = "Name cannot be blank") }
+            hasError = true
+        }
+        if (email.isBlank()) {
+            _uiState.update { it.copy(emailError = "Email cannot be blank") }
+            hasError = true
+        }
+        if (password.isBlank()) {
+            _uiState.update { it.copy(passwordError = "Password cannot be blank") }
+            hasError = true
+        }
+        if (hasError) return
+
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
             try {
@@ -79,7 +103,11 @@ class AuthViewModel @Inject constructor(
     }
 
     fun onSendResetLink() {
-        val email = uiState.value.email
+        val email = uiState.value.email.trim()
+        if (email.isBlank()) {
+            _uiState.update { it.copy(emailError = "Email cannot be blank") }
+            return
+        }
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
             try {

@@ -9,58 +9,66 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.navigation.NavHostController
+import com.example.myapplication7.ui.components.SidebarScaffold
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun CalendarScreen() {
+fun CalendarScreen(
+    navController: NavHostController,
+    onLogout: () -> Unit
+) {
     val selectedDate = remember { mutableStateOf(LocalDate.now()) }
     val tasks = remember { mutableStateMapOf<LocalDate, SnapshotStateList<String>>() }
     var showDialog by remember { mutableStateOf(false) }
     var newTask by remember { mutableStateOf("") }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        AndroidView(
-            factory = { ctx ->
-                CalendarView(ctx).apply {
-                    date = selectedDate.value.toEpochDay() * 24 * 60 * 60 * 1000
-                    setOnDateChangeListener { _, year, month, dayOfMonth ->
-                        selectedDate.value = LocalDate.of(year, month + 1, dayOfMonth)
-                    }
-                }
-            },
-            modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        Text(
-            text = selectedDate.value.format(DateTimeFormatter.ofPattern("MMM dd, yyyy")),
-            style = MaterialTheme.typography.titleLarge
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-
-        val list = tasks.getOrPut(selectedDate.value) { mutableStateListOf() }
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+    SidebarScaffold(navController = navController, title = "Calendar", onLogout = onLogout) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .padding(16.dp)
         ) {
-            Column(modifier = Modifier.padding(16.dp)) {
-                if (list.isEmpty()) {
-                    Text("No tasks yet", style = MaterialTheme.typography.bodyMedium)
-                } else {
-                    list.forEach { task ->
-                        Text("• $task", style = MaterialTheme.typography.bodyLarge)
+            AndroidView(
+                factory = { ctx ->
+                    CalendarView(ctx).apply {
+                        date = selectedDate.value.toEpochDay() * 24 * 60 * 60 * 1000
+                        setOnDateChangeListener { _, year, month, dayOfMonth ->
+                            selectedDate.value = LocalDate.of(year, month + 1, dayOfMonth)
+                        }
                     }
-                }
-                if (list.size < 3) {
-                    OutlinedButton(
-                        onClick = { showDialog = true },
-                        modifier = Modifier.padding(top = 8.dp)
-                    ) {
-                        Text("Add Task")
+                },
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = selectedDate.value.format(DateTimeFormatter.ofPattern("MMM dd, yyyy")),
+                style = MaterialTheme.typography.titleLarge
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+
+            val list = tasks.getOrPut(selectedDate.value) { mutableStateListOf() }
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    if (list.isEmpty()) {
+                        Text("No tasks yet", style = MaterialTheme.typography.bodyMedium)
+                    } else {
+                        list.forEach { task ->
+                            Text("• $task", style = MaterialTheme.typography.bodyLarge)
+                        }
+                    }
+                    if (list.size < 3) {
+                        OutlinedButton(
+                            onClick = { showDialog = true },
+                            modifier = Modifier.padding(top = 8.dp)
+                        ) {
+                            Text("Add Task")
+                        }
                     }
                 }
             }
@@ -95,4 +103,3 @@ fun CalendarScreen() {
         )
     }
 }
-
