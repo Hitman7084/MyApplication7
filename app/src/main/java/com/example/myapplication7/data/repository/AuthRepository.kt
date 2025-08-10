@@ -1,8 +1,8 @@
 package com.example.myapplication7.data.repository
 
-import io.supabase.SupabaseClient
-import io.supabase.gotrue.gotrue
-import io.supabase.gotrue.providers.builtin.Email
+import io.github.jan.supabase.SupabaseClient
+import io.github.jan.supabase.gotrue.gotrue
+import io.github.jan.supabase.gotrue.providers.builtin.Email
 import javax.inject.Inject
 import javax.inject.Singleton
 
