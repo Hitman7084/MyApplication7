@@ -79,6 +79,7 @@ dependencies {
 
     // Supabase
     implementation(platform(libs.supabase.bom))
+    implementation(libs.supabase.kt)
     implementation(libs.supabase.gotrue)
     implementation(libs.ktor.client.android)
 }
