@@ -5,9 +5,9 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import io.supabase.SupabaseClient
-import io.supabase.gotrue.GoTrue
-import io.supabase.createSupabaseClient
+import io.github.jan.supabase.SupabaseClient
+import io.github.jan.supabase.gotrue.GoTrue
+import io.github.jan.supabase.createSupabaseClient
 import javax.inject.Singleton
 
 /**
