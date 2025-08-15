@@ -25,7 +25,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            var darkTheme by remember { mutableStateOf(isSystemInDarkTheme()) }
+
+            val systemDarkTheme = isSystemInDarkTheme()
+            var darkTheme by remember { mutableStateOf(systemDarkTheme) }
+
             StudyFocusTheme(darkTheme = darkTheme) {
                 // Main App Navigation
                 AppNav(
