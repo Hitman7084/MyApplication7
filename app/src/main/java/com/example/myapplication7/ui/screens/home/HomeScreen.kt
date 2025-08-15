@@ -21,6 +21,8 @@ import com.example.myapplication7.ui.components.SidebarScaffold
 fun HomeScreen(
     navController: NavHostController,
     onLogout: () -> Unit,
+    darkTheme: Boolean,
+    onToggleTheme: () -> Unit,
 ) {
     var startAnimation by remember { mutableStateOf(false) }
     val scale by animateFloatAsState(
@@ -35,7 +37,9 @@ fun HomeScreen(
     SidebarScaffold(
         navController = navController,
         title = "Profile",
-        onLogout = onLogout
+        onLogout = onLogout,
+        darkTheme = darkTheme,
+        onToggleTheme = onToggleTheme
     ) { innerPadding ->
         Box(
             modifier = Modifier

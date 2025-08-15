@@ -26,7 +26,9 @@ sealed class AuthScreen(val route: String) {
 @Composable
 fun AuthNavHost(
     navController: NavHostController,
-    onLoginSuccess: () -> Unit
+    onLoginSuccess: () -> Unit,
+    darkTheme: Boolean,
+    onToggleTheme: () -> Unit
 ) {
     // The ViewModel is shared across all screens in this navigation graph
     val viewModel: AuthViewModel = hiltViewModel()
@@ -51,7 +53,9 @@ fun AuthNavHost(
                 uiState = uiState,
                 onEmailChange = viewModel::onEmailChange,
                 onPasswordChange = viewModel::onPasswordChange,
-                onLoginClick = viewModel::onLoginClicked
+                onLoginClick = viewModel::onLoginClicked,
+                darkTheme = darkTheme,
+                onToggleTheme = onToggleTheme
             )
         }
         composable(AuthScreen.Signup.route) {
@@ -62,7 +66,9 @@ fun AuthNavHost(
                 onEmailChange = viewModel::onEmailChange,
                 onPasswordChange = viewModel::onPasswordChange,
                 onPictureSelect = viewModel::onProfilePicSelected,
-                onSignupClick = viewModel::onSignupClicked
+                onSignupClick = viewModel::onSignupClicked,
+                darkTheme = darkTheme,
+                onToggleTheme = onToggleTheme
             )
         }
         composable(AuthScreen.ForgotPassword.route) {
@@ -70,7 +76,9 @@ fun AuthNavHost(
                 navController = navController,
                 uiState = uiState,
                 onEmailChange = viewModel::onEmailChange,
-                onSendLinkClick = viewModel::onSendResetLink
+                onSendLinkClick = viewModel::onSendResetLink,
+                darkTheme = darkTheme,
+                onToggleTheme = onToggleTheme
             )
         }
     }

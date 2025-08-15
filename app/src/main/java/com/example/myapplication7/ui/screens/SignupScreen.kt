@@ -25,6 +25,7 @@ import com.example.myapplication7.ui.common.StyledButton
 import com.example.myapplication7.ui.common.StyledTextField
 import com.example.myapplication7.ui.viewmodel.AuthUiState
 import kotlinx.coroutines.delay
+import com.example.myapplication7.ui.components.ThemeToggleButton
 
 @Composable
 fun SignupScreen(
@@ -34,7 +35,9 @@ fun SignupScreen(
     onEmailChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
     onPictureSelect: (ImageVector) -> Unit,
-    onSignupClick: () -> Unit
+    onSignupClick: () -> Unit,
+    darkTheme: Boolean,
+    onToggleTheme: () -> Unit
 ) {
     val profilePictures = listOf(
         Icons.Default.Face,
@@ -60,6 +63,11 @@ fun SignupScreen(
                 )
             )
     ) {
+        ThemeToggleButton(
+            darkTheme = darkTheme,
+            onToggle = onToggleTheme,
+            modifier = Modifier.align(Alignment.TopEnd).padding(16.dp)
+        )
         Column(
             modifier = Modifier
                 .fillMaxSize()
