@@ -1,7 +1,13 @@
 <resources>
-    <style name="Theme.MyApplication7" parent="android:Theme.Material.Light.NoActionBar">
-        <item name="android:colorPrimary">@color/purple</item>
-        <item name="android:colorAccent">@color/yellow</item>
-        <item name="android:colorBackground">@color/dark_gray</item>
+    <style name="Theme.MyApplication7" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimaryLight</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryVariantLight</item>
+        <item name="colorSecondary">@color/colorSecondaryLight</item>
+        <item name="android:colorBackground">@color/colorBackgroundLight</item>
+        <item name="colorSurface">@color/colorSurfaceLight</item>
+        <item name="colorError">@color/colorErrorLight</item>
+        <item name="colorOnPrimary">@color/colorOnPrimaryLight</item>
+        <item name="colorOnSecondary">@color/colorOnSecondaryLight</item>
+        <item name="colorOnSurface">@color/colorOnSurfaceLight</item>
     </style>
 </resources>
