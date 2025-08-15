@@ -21,12 +21,15 @@ import androidx.navigation.NavController
 import com.example.myapplication7.ui.common.StyledButton
 import com.example.myapplication7.ui.common.StyledTextField
 import com.example.myapplication7.ui.viewmodel.AuthUiState
+import com.example.myapplication7.ui.components.ThemeToggleButton
 @Composable
 fun ForgotPasswordScreen(
     navController: NavController,
     uiState: AuthUiState,
     onEmailChange: (String) -> Unit,
-    onSendLinkClick: () -> Unit
+    onSendLinkClick: () -> Unit,
+    darkTheme: Boolean,
+    onToggleTheme: () -> Unit
 ) {
     var startAnimation by remember { mutableStateOf(false) }
 
@@ -46,6 +49,11 @@ fun ForgotPasswordScreen(
                 )
             )
     ) {
+        ThemeToggleButton(
+            darkTheme = darkTheme,
+            onToggle = onToggleTheme,
+            modifier = Modifier.align(Alignment.TopEnd).padding(16.dp)
+        )
         Column(
             modifier = Modifier
                 .fillMaxSize()

@@ -4,7 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.runtime.*
 import androidx.hilt.navigation.compose.hiltViewModel // Import hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -24,16 +25,21 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            StudyFocusTheme {
+            val systemDarkTheme = isSystemInDarkTheme()
+            var darkTheme by remember { mutableStateOf(systemDarkTheme) }
+            StudyFocusTheme(darkTheme = darkTheme) {
                 // Main App Navigation
-                AppNav()
+                AppNav(
+                    darkTheme = darkTheme,
+                    onToggleTheme = { darkTheme = !darkTheme }
+                )
             }
         }
     }
 }
 
 @Composable
-fun AppNav() {
+fun AppNav(darkTheme: Boolean, onToggleTheme: () -> Unit) {
     val navController = rememberNavController()
     // Get an instance of the ViewModel, scoped to this NavHost
     val authViewModel: AuthViewModel = hiltViewModel()
@@ -48,22 +54,42 @@ fun AppNav() {
         // Authentication Flow Route
         composable(Screen.Auth.route) {
             // A separate NavHost for auth screens
-            AuthNavHost(navController = rememberNavController(), onLoginSuccess = {
-                // On success, navigate to profile and clear the auth back stack
-                navController.navigate(Screen.Profile.route) {
-                    popUpTo(Screen.Auth.route) { inclusive = true }
-                }
-            })
+            AuthNavHost(
+                navController = rememberNavController(),
+                onLoginSuccess = {
+                    // On success, navigate to profile and clear the auth back stack
+                    navController.navigate(Screen.Profile.route) {
+                        popUpTo(Screen.Auth.route) { inclusive = true }
+                    }
+                },
+                darkTheme = darkTheme,
+                onToggleTheme = onToggleTheme
+            )
         }
         // Profile Screen Route
         composable(Screen.Profile.route) {
-            HomeScreen(navController = navController, onLogout = logout)
+            HomeScreen(
+                navController = navController,
+                onLogout = logout,
+                darkTheme = darkTheme,
+                onToggleTheme = onToggleTheme
+            )
         }
         composable(Screen.Calendar.route) {
-            CalendarScreen(navController = navController, onLogout = logout)
+            CalendarScreen(
+                navController = navController,
+                onLogout = logout,
+                darkTheme = darkTheme,
+                onToggleTheme = onToggleTheme
+            )
         }
         composable(Screen.Bot.route) {
-            BotScreen(navController = navController, onLogout = logout)
+            BotScreen(
+                navController = navController,
+                onLogout = logout,
+                darkTheme = darkTheme,
+                onToggleTheme = onToggleTheme
+            )
         }
     }
 }

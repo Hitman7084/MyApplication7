@@ -11,9 +11,17 @@ import com.example.myapplication7.ui.components.SidebarScaffold
 @Composable
 fun BotScreen(
     navController: NavHostController,
-    onLogout: () -> Unit
+    onLogout: () -> Unit,
+    darkTheme: Boolean,
+    onToggleTheme: () -> Unit
 ) {
-    SidebarScaffold(navController = navController, title = "Bot", onLogout = onLogout) { innerPadding ->
+    SidebarScaffold(
+        navController = navController,
+        title = "Bot",
+        onLogout = onLogout,
+        darkTheme = darkTheme,
+        onToggleTheme = onToggleTheme
+    ) { innerPadding ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
