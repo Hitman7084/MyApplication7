@@ -54,12 +54,11 @@ class AuthViewModel @Inject constructor(
         val email = uiState.value.email.trim()
         val password = uiState.value.password.trim()
         if (email.isBlank()) {
-            _uiState.update { it.copy(emailError = "Email cannot be blank") }
+            _uiState.update { it.copy(emailError = "Email cannot be blank!!") }
             return
         }
         if (password.isBlank()) {
-            _uiState.update { it.copy(passwordError = "Password cannot be blank") }
-            return
+            _uiState.update { it.copy(passwordError = "Password cannot be blank!!") }
         }
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
