@@ -23,6 +23,8 @@ fun SidebarScaffold(
     navController: NavHostController,
     title: String,
     onLogout: () -> Unit,
+    darkTheme: Boolean,
+    onToggleTheme: () -> Unit,
     content: @Composable (PaddingValues) -> Unit
 ) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
@@ -76,6 +78,12 @@ fun SidebarScaffold(
                         IconButton(onClick = { scope.launch { drawerState.open() } }) {
                             Icon(Icons.Filled.Menu, contentDescription = "Menu")
                         }
+                    },
+                    actions = {
+                        ThemeToggleButton(
+                            darkTheme = darkTheme,
+                            onToggle = onToggleTheme
+                        )
                     }
                 )
             }

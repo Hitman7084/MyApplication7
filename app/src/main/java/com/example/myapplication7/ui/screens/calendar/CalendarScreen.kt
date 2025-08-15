@@ -17,14 +17,22 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun CalendarScreen(
     navController: NavHostController,
-    onLogout: () -> Unit
+    onLogout: () -> Unit,
+    darkTheme: Boolean,
+    onToggleTheme: () -> Unit
 ) {
     val selectedDate = remember { mutableStateOf(LocalDate.now()) }
     val tasks = remember { mutableStateMapOf<LocalDate, SnapshotStateList<String>>() }
     var showDialog by remember { mutableStateOf(false) }
     var newTask by remember { mutableStateOf("") }
 
-    SidebarScaffold(navController = navController, title = "Calendar", onLogout = onLogout) { innerPadding ->
+    SidebarScaffold(
+        navController = navController,
+        title = "Calendar",
+        onLogout = onLogout,
+        darkTheme = darkTheme,
+        onToggleTheme = onToggleTheme
+    ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
