@@ -3,66 +3,75 @@ import express from "express";
 import cors from "cors";
 import "dotenv/config";
 
+
 const app = express();
 app.use(cors());
 app.use(express.json({ limit: "1mb" }));
 
-const SYSTEM_PROMPT = `
-You are ACME Assistant. Stay strictly on topic for ACME app help,
-answer concisely in bullet points, and refuse unrelated questions.
-`;
 
-const MODEL = process.env.OPENAI_MODEL || "gpt-4o-mini"; // change if needed
-const OPENAI_URL = "https://api.openai.com/v1/chat/completions";
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+const OPENROUTER_KEY   = process.env.OPENROUTER_API_KEY || "";
+const MODEL            = process.env.OPENROUTER_MODEL || "mistralai/mistral-7b-instruct:free";
+const SYSTEM_PROMPT    = process.env.SYSTEM_PROMPT || "You are ACME Assistant. Answer concisely.";
+const APP_URL          = process.env.APP_URL || "";
+const APP_NAME         = process.env.APP_NAME || "Chat Server";
 
-if (!OPENAI_API_KEY) {
-  console.error("❌ Missing OPENAI_API_KEY in .env");
+if (!OPENROUTER_KEY) {
+  console.error("❌ Missing OPENROUTER_API_KEY in /server/.env");
 }
+
+app.get("/", (_req, res) => {
+  res.json({ ok: true, provider: "openrouter", model: MODEL });
+});
 
 app.post("/chat", async (req, res) => {
   try {
-    const messages = Array.isArray(req.body?.messages) ? req.body.messages : [];
-    // Basic validation
-    const sane = messages
+    // Expect: { messages: [{role, content}, ...] }
+    const input = req.body?.messages;
+    const messages = Array.isArray(input) ? input : [];
+    const sanitized = messages
       .filter(m => m && typeof m.role === "string" && typeof m.content === "string")
       .map(m => ({ role: m.role === "assistant" ? "assistant" : "user", content: m.content }));
 
     const body = {
       model: MODEL,
-      messages: [{ role: "system", content: SYSTEM_PROMPT }, ...sane],
+      messages: [{ role: "system", content: SYSTEM_PROMPT }, ...sanitized],
       temperature: 0.3
     };
 
-    const r = await fetch(OPENAI_URL, {
+    const headers = {
+      "Authorization": `Bearer ${OPENROUTER_KEY}`,
+      "Content-Type": "application/json",
+    };
+    // OpenRouter recommends these optional headers for attribution/rate-limit friendliness
+    if (APP_URL)  headers["HTTP-Referer"] = APP_URL;
+    if (APP_NAME) headers["X-Title"]      = APP_NAME;
+
+    const r = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
-      headers: {
-        "Authorization": `Bearer ${OPENAI_API_KEY}`,
-        "Content-Type": "application/json"
-      },
+      headers,
       body: JSON.stringify(body)
     });
 
-    const text = await r.text(); // read raw first for easier logging
+    const raw = await r.text();
     let json;
-    try { json = JSON.parse(text); } catch { /* not JSON */ }
+    try { json = JSON.parse(raw); } catch { /* keep raw for error */ }
 
     if (!r.ok) {
-      console.error("❌ OpenAI error", r.status, text);
+      console.error("❌ OpenRouter error", r.status, raw);
       return res.status(r.status).json({
-        error: json?.error?.message || `OpenAI ${r.status}`,
+        error: json?.error?.message || `OpenRouter ${r.status}`,
         provider_status: r.status,
-        provider_body: json || text
+        provider_body: json || raw
       });
     }
 
-    const reply = json?.choices?.[0]?.message?.content;
-    if (!reply) {
-      console.error("⚠️ Unexpected OpenAI payload", json);
+    const text = json?.choices?.[0]?.message?.content;
+    if (!text) {
+      console.error("⚠️ Unexpected OpenRouter payload", json);
       return res.status(502).json({ error: "No content from model", provider_body: json });
     }
 
-    return res.json({ text: reply });
+    return res.json({ text });
   } catch (e) {
     console.error("💥 Server exception:", e);
     return res.status(500).json({ error: e?.message || "Server error" });
@@ -70,4 +79,4 @@ app.post("/chat", async (req, res) => {
 });
 
 const port = Number(process.env.PORT || 8787);
-app.listen(port, () => console.log(`API on http://localhost:${port}`));
+app.listen(port, () => console.log(`✅ API on http://localhost:${port} (model: ${MODEL})`));
