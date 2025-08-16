@@ -53,12 +53,12 @@ fun SidebarScaffold(
                     }
                 )
                 NavigationDrawerItem(
-                    label = { Text("Chat") },
-                    selected = title == "Chat",
+                    label = { Text("Bot") },
+                    selected = title == "Bot",
                     icon = { Icon(Icons.Filled.SmartToy, contentDescription = null) },
                     onClick = {
                         scope.launch { drawerState.close() }
-                        navController.navigate(Screen.ChatList.route)
+                        navController.navigate(Screen.Bot.route)
                     }
                 )
                 NavigationDrawerItem(

@@ -29,13 +29,9 @@ android {
     }
 
     buildTypes {
-        debug {
-            buildConfigField("String", "CHAT_BASE_URL", "\"http://10.0.2.2:8787/\"")
-        }
         release {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            buildConfigField("String", "CHAT_BASE_URL", "\"https://YOUR_BACKEND_URL/\"")
         }
     }
     compileOptions {
@@ -76,16 +72,6 @@ dependencies {
     // Navigation & ViewModel
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
-
-    // Room
-    implementation("androidx.room:room-runtime:2.6.1")
-    kapt("androidx.room:room-compiler:2.6.1")
-    implementation("androidx.room:room-ktx:2.6.1")
-
-    // Retrofit + Moshi + OkHttp
-    implementation("com.squareup.retrofit2:retrofit:2.11.0")
-    implementation("com.squareup.retrofit2:converter-moshi:2.11.0")
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
 
     // Hilt for Dependency Injection
     implementation(libs.hilt.android)
