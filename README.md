@@ -1,6 +1,5 @@
 # Chatbot Dev Server
 
-
 To run the backend during development:
 
 ```bash
@@ -11,5 +10,4 @@ npm i
 npm start
 
 The Android emulator can reach it at http://10.0.2.2:8787
-
 
