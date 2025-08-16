@@ -79,4 +79,4 @@ app.post("/chat", async (req, res) => {
 });
 
 const port = Number(process.env.PORT || 8787);
-app.listen(port, () => console.log(`✅ API on http://localhost:${port} (model: ${MODEL})`));
+app.listen(port, () => console.log(`API on http://localhost:${port} (model: ${MODEL})`));
