@@ -1,4 +1,3 @@
-// /server/server.js
 import express from "express";
 import cors from "cors";
 import "dotenv/config";
@@ -16,7 +15,7 @@ const APP_URL          = process.env.APP_URL || "";
 const APP_NAME         = process.env.APP_NAME || "Chat Server";
 
 if (!OPENROUTER_KEY) {
-  console.error("❌ Missing OPENROUTER_API_KEY in /server/.env");
+  console.error("Missing OPENROUTER_API_KEY in /server/.env");
 }
 
 app.get("/", (_req, res) => {
